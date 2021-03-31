@@ -2,4 +2,5 @@
 
 export(l2.extract)
 export(l2.preview)
+export(rean.extract)
 import(dplyr)
