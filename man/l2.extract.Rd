@@ -5,7 +5,7 @@
 \title{Extract necessary data from DARDAR-Nice L2 filenames (ta and icnc, mainly)
 Data fame is adapted to run on some in situ functions}
 \usage{
-l2.extract(fn, dir.rds = NULL, only.ice = TRUE)
+l2.extract(fn, dir.rds = NULL, only.ice = TRUE, keep.index = FALSE)
 }
 \arguments{
 \item{fn}{name of DARDAR-Nice L2 file}
