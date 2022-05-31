@@ -532,10 +532,70 @@ l2.preview.read <- function(fn, l.config, return.orbit = FALSE) {
 }
 
 
+l2.rean.read <- function(fn) {
+
+  dir.rean <- gsub("DARNI_L2_PRO", "DARNI_L2_REAN", dirname(fn))
+  fn.rean <- paste0(dir.rean, "/", gsub("PRO", "REAN_cams_eac4_ml210", basename(fn)))
+
+  m <- niforcing::df_cams$m; names(m) <- niforcing::df_cams$id
+
+  read <- function(nc, varname) {
+    if(class(nc)!="ncdf4") return(NA)
+    as.numeric(ncdf4::ncvar_get(nc, varname))
+  }
+
+  nc <- ncdf4::nc_open(fn)
+  nc.rean <- ncdf4::nc_open(fn.rean)
+
+  nheight <- nc$dim$height$len
+  ntime <- nc$dim$time$len
+  df <- data.frame(expand.grid(
+    idx.height = 1:nheight,
+    idx.time = 1:ntime
+  )) %>%
+    dplyr::mutate(
+             idx = 1:nrow(.),
+             fn = basename(fn),
+             darni_t = read(nc, "ta")
+    )
+
+  df <- df %>%
+    dplyr::mutate(darni_p = read(nc, "plev")[idx]) %>%
+    dplyr::mutate(rho = darni_p / (287 * darni_t)) %>%
+    dplyr::mutate(
+             aerm_seasalt = read(nc.rean, "aermr01")[idx] + read(nc.rean, "aermr02")[idx] + read(nc.rean, "aermr03")[idx],
+             aerm_dust = read(nc.rean, "aermr04")[idx] + read(nc.rean, "aermr05")[idx] + read(nc.rean, "aermr06")[idx],
+             aerm_OM = read(nc.rean, "aermr07")[idx] + read(nc.rean, "aermr08")[idx],
+             aerm_BC = read(nc.rean, "aermr09")[idx] + read(nc.rean, "aermr10")[idx],
+             aerm_sulfate = read(nc.rean, "aermr11")[idx],
+             aerm_total = aerm_seasalt + aerm_dust + aerm_OM + aerm_BC + aerm_sulfate,
+             aern_seasalt = rho * (read(nc.rean, "aermr01")[idx] / m["aermr01"] +
+                                        read(nc.rean, "aermr02")[idx] / m["aermr02"] +
+                                        read(nc.rean, "aermr03")[idx] / m["aermr03"] ),
+             aern_dust = rho * (read(nc.rean, "aermr04")[idx] / m["aermr04"]  +
+                                     read(nc.rean, "aermr05")[idx] / m["aermr05"]  +
+                                     read(nc.rean, "aermr06")[idx] / m["aermr06"] ),
+             aern_OM = rho * (read(nc.rean, "aermr07")[idx] / m["aermr07"]  +
+                                   read(nc.rean, "aermr08")[idx] / m["aermr08"] ),
+             aern_BC = rho * (read(nc.rean, "aermr09")[idx] / m["aermr09"]  +
+                                   read(nc.rean, "aermr10")[idx] / m["aermr10"] ),
+             aern_sulfate = rho * read(nc.rean, "aermr11")[idx] / m["aermr11"],
+             aern_total = aern_seasalt + aern_dust + aern_OM + aern_BC + aern_sulfate
+           ) %>%
+    dplyr::arrange(idx)
+
+  ncdf4::nc_close(nc)
+  ncdf4::nc_close(nc.rean)
+  return(df)
+}
+
+
+
+
 l2.preview.data <- function(l.config) {
 
   df.data.l2 <- plyr::ldply(l.config$input$fn, l2.preview.read, l.config = l.config)
-  df.data.rean <- plyr::ldply(l.config$input$fn, darnitools::rean.extract)
+  df.data.rean <- plyr::ldply(l.config$input$fn, l2.rean.read)
   ## df.orbit <- plyr::ldply(l.config$input$fn,l2.preview.read,l.config=l.config,return.orbit=TRUE)
 
   df.data <- dplyr::left_join(df.data.l2, df.data.rean, by = c("idx", "fn")) %>%
