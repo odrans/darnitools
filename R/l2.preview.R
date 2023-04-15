@@ -489,6 +489,10 @@ l2.preview.read <- function(fn, l.config, return.orbit = FALSE) {
       precipitation_flag = as.numeric(ncdf4::ncvar_get(nc, "precipitation_flag"))[idx.time]
     )
 
+
+  if(grepl("v1.", basename(fn), fixed = T)) var_clm2 <- "clm_v2"
+  if(grepl("v2.", basename(fn), fixed = T)) var_clm2 <- "clm_full"
+
   if (!return.orbit) {
     df <- df %>%
       dplyr::filter(time >= l.config$orbit.start & time <= l.config$orbit.end) %>%
@@ -496,7 +500,7 @@ l2.preview.read <- function(fn, l.config, return.orbit = FALSE) {
       dplyr::mutate(
         ta = as.numeric(ncdf4::ncvar_get(nc, "ta"))[idx],
         clm = as.numeric(ncdf4::ncvar_get(nc, "clm"))[idx],
-        clm.v2 = as.numeric(ncdf4::ncvar_get(nc, "clm_v2"))[idx],
+        clm.v2 = as.numeric(ncdf4::ncvar_get(nc, var_clm2))[idx],
         icnc_5um = as.numeric(ncdf4::ncvar_get(nc, "icnc_5um"))[idx],
         icnc_100um = as.numeric(ncdf4::ncvar_get(nc, "icnc_100um"))[idx],
         iwc = as.numeric(ncdf4::ncvar_get(nc, "iwc"))[idx],
