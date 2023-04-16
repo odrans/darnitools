@@ -94,7 +94,7 @@ grid_merge_map <- function(dir) {
   ## Merge the data
   df_grid <- df %>%
     dplyr::mutate(flag_ice = n_ice > 0) %>%
-    dplyr::group_by(lat, lon) %>%
+    dplyr::group_by(lat, lon, ta) %>%
     dplyr::summarize(n_tot = sum(n_tot),
                      n_ice = sum(n_ice),
                      icnc_5um_sum = sum(icnc_5um_sum),
