@@ -7,9 +7,9 @@
 \title{Tools for processing DARDAR-Nice data
 TBC}
 \description{
-Just what the title says
+Basically what the title says.
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Odran Sourdeval \email{odran.sourdeval@univ-lille.fr}
 
 }

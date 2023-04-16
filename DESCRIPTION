@@ -2,12 +2,11 @@ Package: darnitools
 Title: General tools to process DARDAR-Nice data
 Version: 1.0
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Odran",
+           family = "Sourdeval",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: Just what the title says
+           email = "odran.sourdeval@univ-lille.fr")
+Description: Basically what the title says.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

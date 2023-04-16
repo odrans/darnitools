@@ -1,5 +1,6 @@
 
-l2.preview_depricated <- function(orbit.start, orbit.end, dir.data, dir.out = "~", return.data = FALSE) {
+#' @export
+l2_preview <- function(orbit.start, orbit.end, dir.data, dir.out = "~", return.data = FALSE) {
 
   Sys.setenv(TZ = "UTC")
   require(dplyr)
@@ -35,26 +36,7 @@ l2.preview_depricated <- function(orbit.start, orbit.end, dir.data, dir.out = "~
     ggplot2::ggplotGrob(l.plot$p.clm + gg.rm.yaxis)
   )
 
-  ## g.rean.mass <- gridExtra::gtable_rbind(
-  ##                             ggplot2::ggplotGrob(l.plot$p.aerm.seasalt + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aerm.dust + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aerm.BC + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aerm.OM + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aerm.sulfate + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aerm.total)
-  ##                           )
-
-  ## g.rean.num <- gridExtra::gtable_rbind(
-  ##                             ggplot2::ggplotGrob(l.plot$p.aern.seasalt + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aern.dust + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aern.BC + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aern.OM  + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aern.sulfate + gg.rm.xaxis),
-  ##                             ggplot2::ggplotGrob(l.plot$p.aern.total)
-  ##                          )
-
   g <- gridExtra::gtable_cbind(g.ret, g.aux)
-  ## g.rean <- gridExtra::gtable_cbind(g.rean.mass, g.rean.num)
 
   daynight.darni <- levels(l.darni$df.ta$nightday_flag)
   daynight.idx <- "B"
@@ -64,10 +46,9 @@ l2.preview_depricated <- function(orbit.start, orbit.end, dir.data, dir.out = "~
   }
 
   fn.out <- paste0(dir.out, "/DARDAR-Nice_preview_l2_", format(orbit.start, "%Y%m%d-%H%M%S"), "_", format(orbit.end, "%Y%m%d-%H%M%S"), "_", daynight.idx, ".png")
-  ## fn.out.rean <- paste0("~", "/DARDAR-Nice_preview_rean_", format(orbit.start, "%Y%m%d-%H%M%S"), "_", format(orbit.end, "%Y%m%d-%H%M%S"), "_", daynight.idx, ".png")
   h <- 5.2
-  g <- icnc::set_panel_size(g = g, height = grid::unit(c(h, h, h, h, h, h), "cm"), width = grid::unit(c(h * 3, h * 3), "cm"), file = fn.out)
-  ## g.rean <- icnc::set_panel_size(g = g.rean, height = grid::unit(c(h, h, h, h, h, h), "cm"), width = grid::unit(c(h * 3, h * 3), "cm"), file = fn.out.rean)
+  g <- set_panel_size(g = g, height = grid::unit(c(h, h, h, h, h, h), "cm"), width = grid::unit(c(h * 3, h * 3), "cm"), file = fn.out)
+
   dev.off()
 
   return()
@@ -157,79 +138,6 @@ l2.preview.preplot <- function(l.darni, l.config) {
     ggplot2::ggplot() +
     ggplot2::geom_point(ggplot2::aes(x = time, y = precipitation_flag, color = precipitation_flag)) -> l$p.precip
 
-  ## l.darni$df.data %>%
-##     dplyr::mutate(aerm_total = pmin(aerm_total, l.config$aerm_total$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aerm_total)) +
-##     ggplot2::scale_fill_distiller(l.config$aerm_total$name, palette = l.config$aerm_total$pal, limits = l.config$aerm_total$limits) -> l$p.aerm.total
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aern_total = pmin(aern_total * 1E-6, l.config$aern_total$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aern_total)) +
-##     ggplot2::scale_fill_distiller(l.config$aern_total$name, palette = l.config$aern_total$pal, limits = l.config$aern_total$limits) -> l$p.aern.total
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aerm_sulfate = pmin(aerm_sulfate, l.config$aerm_sulfate$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aerm_sulfate)) +
-##     ggplot2::scale_fill_distiller(l.config$aerm_sulfate$name, palette = l.config$aerm_sulfate$pal, limits = l.config$aerm_sulfate$limits) -> l$p.aerm.sulfate
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aern_sulfate = pmin(aern_sulfate * 1E-6, l.config$aern_sulfate$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aern_sulfate)) +
-##     ggplot2::scale_fill_distiller(l.config$aern_sulfate$name, palette = l.config$aern_sulfate$pal, limits = l.config$aern_sulfate$limits) -> l$p.aern.sulfate
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aerm_seasalt = pmin(aerm_seasalt, l.config$aerm_seasalt$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aerm_seasalt)) +
-##     ggplot2::scale_fill_distiller(l.config$aerm_seasalt$name, palette = l.config$aerm_seasalt$pal, limits = l.config$aerm_seasalt$limits) -> l$p.aerm.seasalt
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aern_seasalt = pmin(aern_seasalt * 1E-6, l.config$aern_seasalt$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aern_seasalt)) +
-##     ggplot2::scale_fill_distiller(l.config$aern_seasalt$name, palette = l.config$aern_seasalt$pal, limits = l.config$aern_seasalt$limits) -> l$p.aern.seasalt
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aerm_dust = pmin(aerm_dust, l.config$aerm_dust$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aerm_dust)) +
-##     ggplot2::scale_fill_distiller(l.config$aerm_dust$name, palette = l.config$aerm_dust$pal, limits = l.config$aerm_dust$limits) -> l$p.aerm.dust
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aern_dust = pmin(aern_dust * 1E-6, l.config$aern_dust$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aern_dust)) +
-##     ggplot2::scale_fill_distiller(l.config$aern_dust$name, palette = l.config$aern_dust$pal, limits = l.config$aern_dust$limits) -> l$p.aern.dust
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aerm_BC = pmin(aerm_BC, l.config$aerm_BC$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aerm_BC)) +
-##     ggplot2::scale_fill_distiller(l.config$aerm_BC$name, palette = l.config$aerm_BC$pal, limits = l.config$aerm_BC$limits) -> l$p.aerm.BC
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aern_BC = pmin(aern_BC * 1E-6, l.config$aern_BC$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aern_BC)) +
-##     ggplot2::scale_fill_distiller(l.config$aern_BC$name, palette = l.config$aern_BC$pal, limits = l.config$aern_BC$limits) -> l$p.aern.BC
-
-## l.darni$df.data %>%
-##     dplyr::mutate(aerm_OM = pmin(aerm_OM, l.config$aerm_OM$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aerm_OM)) +
-##     ggplot2::scale_fill_distiller(l.config$aerm_OM$name, palette = l.config$aerm_OM$pal, limits = l.config$aerm_OM$limits) -> l$p.aerm.OM
-
-##   l.darni$df.data %>%
-##     dplyr::mutate(aern_OM = pmin(aern_OM * 1E-6, l.config$aern_OM$limit[2])) %>%
-##     ggplot2::ggplot() +
-##     ggplot2::geom_tile(ggplot2::aes(x = time, y = height, fill = aern_OM)) +
-##     ggplot2::scale_fill_distiller(l.config$aern_OM$name, palette = l.config$aern_OM$pal, limits = l.config$aern_OM$limits) -> l$p.aern.OM
-
-
 
   l$p.clm <- l$p.clm + gg.xyscale() + gg.theme() + gg.isoth()
   l$p.clm.v2 <- l$p.clm.v2 + gg.xyscale() + gg.theme() + gg.isoth()
@@ -242,19 +150,6 @@ l2.preview.preplot <- function(l.darni, l.config) {
   l$p.icnc.100um <- l$p.icnc.100um + gg.xyscale() + gg.theme() + gg.isoth()
   l$p.iwc <- l$p.iwc + gg.xyscale() + gg.theme() + gg.isoth()
   l$p.reff <- l$p.reff + gg.xyscale() + gg.theme() + gg.isoth()
-
-  ## l$p.aerm.total <- l$p.aerm.total + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aern.total <- l$p.aern.total + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aerm.sulfate <- l$p.aerm.sulfate + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aern.sulfate <- l$p.aern.sulfate + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aerm.seasalt <- l$p.aerm.seasalt + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aern.seasalt <- l$p.aern.seasalt + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aerm.dust <- l$p.aerm.dust + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aern.dust <- l$p.aern.dust + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aerm.BC <- l$p.aerm.BC + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aern.BC <- l$p.aern.BC + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aerm.OM <- l$p.aerm.OM + gg.xyscale() + gg.theme() + gg.isoth()
-  ## l$p.aern.OM <- l$p.aern.OM + gg.xyscale() + gg.theme() + gg.isoth()
 
   l$p.iter <- l$p.iter + gg.xscale() + gg.theme()
   l$p.precip <- l$p.precip + gg.xscale() + gg.theme()
@@ -598,13 +493,7 @@ l2.rean.read <- function(fn) {
 
 l2.preview.data <- function(l.config) {
 
-  df.data.l2 <- plyr::ldply(l.config$input$fn, l2.preview.read, l.config = l.config)
-  ## df.data.rean <- plyr::ldply(l.config$input$fn, l2.rean.read)
-
-  ## df.data <- dplyr::left_join(df.data.l2, df.data.rean, by = c("idx", "fn")) %>%
-  ##   dplyr::select(-c(idx.height.y, idx.time.y))
-
-  df.data <- df.data.l2
+  df.data <- plyr::ldply(l.config$input$fn, l2.preview.read, l.config = l.config)
 
   df.data %>%
     select(c(time, lat, lon)) %>%
@@ -638,14 +527,6 @@ l2.preview.data <- function(l.config) {
       iteration_flag = factor(iteration_flag, levels = l.config$iteration_flag$lev, labels = l.config$iteration_flag$lab),
       precipitation_flag = factor(precipitation_flag, levels = l.config$precip_flag$lev, labels = l.config$precip_flag$lab)
     ) -> df.ta
-
-  ## df.orbit %>%
-  ##     dplyr::group_by(time) %>%
-  ##     dplyr::summarize(lat=unique(lat),
-  ##                      lon=unique(lon),
-  ##                      nightday_flag=unique(nightday_flag)) %>%
-  ##     data.frame() %>%
-  ##     dplyr::mutate(nightday_flag=factor(nightday_flag)) -> df.orbit
 
 
   l <- list(df.data = df.data, df.xscale = df.xscale, df.ta = df.ta)
