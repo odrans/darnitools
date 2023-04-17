@@ -16,7 +16,7 @@ l2_grid <- function(dir_darni, dir_gridded, overwrite = FALSE, nthreads = 1) {
   }
 
   ## List of DARDAR-Nice L2 files
-  lf <- list.files(dir_darni, recursive = TRUE, full.names = TRUE)
+  lf <- list.files(dir_darni, recursive = TRUE, full.names = TRUE, pattern = ".nc")
 
   ## Create one set of gridded files per orbits
   null <- plyr::ldply(lf, darnitools::grid_orbit, dir_out = dir_gridded, overwrite = overwrite, .parallel = parallel)
