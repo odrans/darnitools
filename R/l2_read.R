@@ -17,6 +17,8 @@
 #' @export
 l2_read <- function(fn, dir_rds = NULL, filter_ice = TRUE, filter_quality = TRUE, filter_cloudtop = FALSE, keep_index = FALSE) {
 
+  darni_version <- as.numeric(stringr::str_extract(fn, "(?<=v)\\d+\\.\\d+"))
+
   ## Error handling
   if (!is.character(fn) || length(fn) != 1) {
     stop("The 'fn' parameter must be a single character string representing the file name.")
@@ -97,9 +99,15 @@ l2_read <- function(fn, dir_rds = NULL, filter_ice = TRUE, filter_quality = TRUE
                   plev = nc_read(nc, "plev", idx),
                   reff = nc_read(nc, "reffcli", idx),
                   icnc_100um = nc_read(nc, "icnc_100um", idx),
-                  land_water_mask = nc_read(nc, "land_water_mask", idx_time),
-                  clm_full = nc_read(nc, "clm_full", idx)
+                  land_water_mask = nc_read(nc, "land_water_mask", idx_time)
                   )
+
+  ## Read the extra cloud mask depending on the version
+  if(darni_version >= 2.0) {
+    tmp <- tmp %>% mutate(clm_full = nc_read(nc, "clm_full", idx))
+  } else {
+    tmp <- tmp %>% mutate(clm_full = nc_read(nc, "clm_v2", idx))
+  }
 
   ## Convert some units
   tmp <- tmp %>%

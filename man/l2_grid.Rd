@@ -4,7 +4,13 @@
 \alias{l2_grid}
 \title{Grid the DARDAR-Nice data}
 \usage{
-l2_grid(dir_darni, dir_gridded, overwrite = FALSE, nthreads = 1)
+l2_grid(
+  dir_darni,
+  dir_gridded,
+  years_only = NULL,
+  overwrite = FALSE,
+  nthreads = 1
+)
 }
 \arguments{
 \item{dir_darni}{Directory containing DARDAR-Nice L2 data.}
