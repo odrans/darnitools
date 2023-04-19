@@ -8,6 +8,7 @@ l2_grid(
   dir_darni,
   dir_gridded,
   years_only = NULL,
+  version_2 = NULL,
   overwrite = FALSE,
   nthreads = 1
 )
