@@ -1,10 +1,13 @@
-
 #' @title Create gridded DARDAR-Nice data
 #'
 #' @description
-#' Merge the grids from individual orbital files
+#' Merge individual gridded orbits created by `darnitools::grid_orbit` into a single file
+#' Grids created:
+#' - global distributions of icnc_5um and icnc_100um (stored in dir_out/map)
+#' - zonal distribtuions of icnc_5um and icnc_100um (stored in dir_out/zonal)
+#' - Ni as function of T (stored in dir_out/ni_ta)
 #'
-#' @param dir Directory used to output the gridded data
+#' @param dir_out Directory used to output the gridded data
 #' @export
 grid_merge <- function(dir_out) {
 
@@ -18,15 +21,13 @@ grid_merge <- function(dir_out) {
   dir_orbit_ni_ta <- paste0(dir_out, "/ni_ta")
 
   ## Run the gridding functions
-  null <- grid_merge_map(dir_orbit_map)
-  null <- grid_merge_zonal(dir_orbit_zonal)
-  null <- grid_merge_ni_ta(dir_orbit_ni_ta)
+  null <- darnitools::grid_merge_map(dir_orbit_map)
+  null <- darnitools::grid_merge_zonal(dir_orbit_zonal)
+  null <- darnitools::grid_merge_ni_ta(dir_orbit_ni_ta)
 
   return(NULL)
 
 }
-
-
 
 #' @title Create Ni-Ta database
 #'
@@ -38,7 +39,7 @@ grid_merge_ni_ta <- function(dir) {
 
   ## List all orbit files
   dir_orbits <- paste0(dir, "/orbits")
-  lf <- list.files(dir_orbits, full = TRUE)
+  lf <- list.files(dir_orbits, full.names = TRUE)
 
   ## Set the output file name
   fn_gridded <- gsub("L2", "L3", basename(lf[1]))
@@ -81,7 +82,7 @@ grid_merge_map <- function(dir) {
 
   ## List all orbit files
   dir_orbits <- paste0(dir, "/orbits")
-  lf <- list.files(dir_orbits, full = TRUE)
+  lf <- list.files(dir_orbits, full.names = TRUE)
 
   ## Set the output file name
   fn_gridded <- gsub("L2", "L3", basename(lf[1]))
@@ -129,7 +130,7 @@ grid_merge_zonal <- function(dir) {
 
   ## List all orbit files
   dir_orbits <- paste0(dir, "/orbits")
-  lf <- list.files(dir_orbits, full = TRUE)
+  lf <- list.files(dir_orbits, full.names = TRUE)
 
   ## Set the output file name
   fn_gridded <- gsub("L2", "L3", basename(lf[1]))

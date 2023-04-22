@@ -1,10 +1,10 @@
-#' @title Grid DARDAR-Nice data from an orbit file
+#' @title Grid DARDAR-Nice data from L2 files
 #'
 #' @description
-#' Grids created:
-#' - global distributions of icnc_5um and icnc_100um
-#' - zonal distribtuions of icnc_5um and icnc_100um
-#' - Ni as function of T
+#' This function takes a DARDAR-Nice L2 file and creates gridded data:
+#' - global distributions of icnc_5um and icnc_100um (stored in dir_out/map/orbits)
+#' - zonal distribtuions of icnc_5um and icnc_100um (stored in dir_out/zonal/orbits)
+#' - Ni as function of T (stored in dir_out/ni_ta/orbits)
 #' File function creates *.rds files that will need to be merged.
 #'
 #' @param fn Name of the DARDAR-Nice L2 file

@@ -1,3 +1,11 @@
+#' @title Compare two versions of the DARDAR-Nice L2 data using in grid
+#'
+#' @description This function reads the gridded data created by
+#' `grid_orbit_version` and merges all orbit files.
+#' A rds file is created with the merged data.
+#'
+#' @param dir_gridded Directory where the gridded data is stored
+#' @param v2 Version number of the second version
 #' @export
 grid_merge_version <- function(dir_gridded, v2) {
 

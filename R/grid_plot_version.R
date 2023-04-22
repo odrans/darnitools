@@ -1,3 +1,7 @@
+#' @title Plot DARNI PRO L3 zonal differences between two versions
+#' @param fn_v1 File name of the first version gridded data
+#' @param fn_v2 File name of the second version gridded data
+#' @param dir_out Directory to save the plot
 #' @export
 grid_plot_zonal_versions <- function(fn_v1, fn_v2, dir_out) {
 
@@ -33,6 +37,11 @@ grid_plot_zonal_versions <- function(fn_v1, fn_v2, dir_out) {
 
 }
 
+#' @title Plot DARNI PRO L3 map differences between two versions
+#' @param fn_v1 File name of the first version gridded data
+#' @param fn_v2 File name of the second version gridded data
+#' @param dir_out Directory to save the plot
+#' @param t_bins Temperature bins to plot
 #' @export
 grid_plot_map_versions <- function(fn_v1, fn_v2, dir_out, t_bins = c(-65, -45, -25)) {
 

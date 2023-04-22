@@ -2,7 +2,7 @@
 % Please edit documentation in R/l2_grid.R
 \name{l2_grid}
 \alias{l2_grid}
-\title{Grid the DARDAR-Nice data}
+\title{Overall function to grid the DARDAR-Nice data}
 \usage{
 l2_grid(
   dir_darni,
@@ -18,10 +18,15 @@ l2_grid(
 
 \item{dir_gridded}{Directory that will contain the gridded product.}
 
+\item{years_only}{Years to process. Default: NULL (all years).}
+
+\item{version_2}{Version 2 of the DARDAR-Nice data to compare with. Default: NULL (no comparison).}
+
 \item{overwrite}{Overwrite the data if it exists. Default: FALSE.}
 
 \item{nthreads}{Number of parallel threads. Default: nthreads = 1.}
 }
 \description{
-Grid the DARDAR-Nice data
+This function is a wrapper around the functions: \code{\link{grid_orbit}} and \code{\link{grid_merge}}.
+If \code{version_2} is not NULL, it will also call \code{\link{grid_orbit_version}} and \code{\link{grid_merge_version}}.
 }

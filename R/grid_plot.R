@@ -1,4 +1,10 @@
-
+#' @title Plotting DARDAR-Nice L3 global maps
+#'
+#' @param fn File name of the DARDAR-Nice L3 data
+#' @param dir_out Directory to save the plots
+#' @param t_bins Temperature bins to plot (must be included in the gridded data)
+#' @param ni_lim Limits of the color scale for the ice crystal number concentration (in #/L)
+#' @param suffix Suffix to add to the file name
 #' @export
 grid_plot_map <- function(fn, dir_out, t_bins = c(-65, -45, -25), ni_lim = c(0, 300), suffix = NULL) {
 
@@ -26,7 +32,7 @@ grid_plot_map <- function(fn, dir_out, t_bins = c(-65, -45, -25), ni_lim = c(0, 
     plotutils::geom_world_polygon() +
     ## plotutils::scale_x_geo() +
     ## plotutils::scale_y_geo() +
-    facet_wrap(~ta,labeller = ggplot2::label_parsed) +
+    facet_wrap(~ta, labeller = ggplot2::label_parsed) +
     theme(aspect.ratio = 0.7,
           panel.background = ggplot2::element_rect(fill = "gray"))
 
@@ -35,6 +41,13 @@ grid_plot_map <- function(fn, dir_out, t_bins = c(-65, -45, -25), ni_lim = c(0, 
   return(NULL)
 }
 
+
+#' @title Plotting DARDAR-Nice L3 zonal maps
+#'
+#' @param fn File name of the DARDAR-Nice L3 data
+#' @param dir_out Directory to save the plots
+#' @param ni_lim Limits of the color scale for the ice crystal number concentration (in #/L)
+#' @param suffix Suffix to add to the file name
 #' @export
 grid_plot_zonal <- function(fn, dir_out, ni_lim = c(0, 300), suffix = NULL) {
 
@@ -62,7 +75,11 @@ grid_plot_zonal <- function(fn, dir_out, ni_lim = c(0, 300), suffix = NULL) {
   return(NULL)
 }
 
-
+#' @title Plotting DARDAR-Nice L3 Ni as function of temperature
+#'
+#' @param fn File name of the DARDAR-Nice L3 data
+#' @param dir_out Directory to save the plots
+#' @param suffix Suffix to add to the file name
 #' @export
 grid_plot_ni_ta <- function(fn, dir_out, suffix = NULL) {
 

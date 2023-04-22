@@ -11,7 +11,16 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
+Remotes:
+    jmuelmen/plotutils
 Imports:
     plyr,
     dplyr,
-    ggplot2    
+    ggplot2,
+    scales,
+    doMC,
+    gridExtra,
+    Hmisc,
+    ncdf4,
+    plotutils,
+    stringr

@@ -7,8 +7,12 @@
 grid_merge(dir_out)
 }
 \arguments{
-\item{dir}{Directory used to output the gridded data}
+\item{dir_out}{Directory used to output the gridded data}
 }
 \description{
-Merge the grids from individual orbital files
+Merge individual gridded orbits created by `darnitools::grid_orbit` into a single file
+Grids created:
+- global distributions of icnc_5um and icnc_100um (stored in dir_out/map)
+- zonal distribtuions of icnc_5um and icnc_100um (stored in dir_out/zonal)
+- Ni as function of T (stored in dir_out/ni_ta)
 }

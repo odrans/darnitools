@@ -1,4 +1,10 @@
-
+#' @title DARDAR-Nice L2 preview
+#'
+#' @param orbit.start Start of the orbit to be processed (UTC). Format: POSIXct
+#' @param orbit.end End of the orbit to be processed (UTC). Format: POSIXct
+#' @param dir.data Directory where the data are stored
+#' @param dir.out Directory where the output will be stored
+#' @param return.data If TRUE, the function returns the data used to plot the preview.
 #' @export
 l2_preview <- function(orbit.start, orbit.end, dir.data, dir.out = "~", return.data = FALSE) {
 
@@ -350,7 +356,7 @@ l2.preview.fileinfo <- function(l.config) {
 
   data.frame(
     fn = sapply(seq.days, function(day) {
-      list.files(paste0(l.config$dir.data, format(day, "/%Y/%Y_%m_%d")), full = T)
+      list.files(paste0(l.config$dir.data, format(day, "/%Y/%Y_%m_%d")), full.names = T)
     }) %>% unlist(),
     stringsAsFactors = FALSE
   ) %>%
