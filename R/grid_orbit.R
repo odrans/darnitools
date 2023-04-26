@@ -35,12 +35,12 @@ grid_orbit <- function(fn, dir_out, overwrite = FALSE) {
 
   ## Load the DARDAR-Nice data
   df <- darnitools::l2_read(fn, filter_ice = FALSE, filter_quality = TRUE) %>%
-    dplyr::select(c(ta, icnc_5um, icnc_100um, lat, lon, height, flag_ice))
+    dplyr::select(c(ta, icnc_5um, icnc_100um, lat, lon, height, flag_ice, season, region))
 
   ## Run the gridding functions
   null <- grid_orbit_map(df, fn_orbit_map)
   null <- grid_orbit_zonal(df, fn_orbit_zonal)
-  null <- grid_orbit_ni_ta(df, fn_orbit_ni_ta)
+  null <- grid_orbit_ni_ta(df, fn_orbit_ni_ta, season_region = TRUE)
 
   return(NULL)
 
@@ -49,7 +49,17 @@ grid_orbit <- function(fn, dir_out, overwrite = FALSE) {
 #' @title Grid Ni as function of temperature
 grid_orbit_ni_ta <- function(df, fn_out,
                              bins_ni = 10^seq(-3, 5, by = 0.05),
-                             bins_ta = seq(-90, 0, by = 1)) {
+                             bins_ta = seq(-90, 0, by = 1),
+                             season_region = FALSE) {
+
+  ## If season_region = TRUE, then the data is gridded by season and region
+  if(season_region) {
+    df <- rbind(df, df %>% dplyr::mutate(region = "Global"))
+    df <- rbind(df, df %>% dplyr::mutate(season = "All"))
+  } else {
+    df <- df %>% dplyr::mutate(region = factor("Global"),
+                               season = factor("All"))
+  }
 
   df_grid <- df %>%
     dplyr::filter(flag_ice) %>%
@@ -57,10 +67,10 @@ grid_orbit_ni_ta <- function(df, fn_out,
                   icnc_5um >= first(bins_ni) & icnc_5um <= last(bins_ni)) %>%
     plotutils::bin(ta, bins_ta) %>%
     plotutils::bin(icnc_5um, bins_ni) %>%
-    dplyr::group_by(ta_bin) %>%
+    dplyr::group_by(ta_bin, region, season) %>%
     dplyr::mutate(n_ta_bin = n()) %>%
     dplyr::ungroup() %>%
-    dplyr::group_by(ta_bin, icnc_5um_bin) %>%
+    dplyr::group_by(ta_bin, icnc_5um_bin, region, season) %>%
     dplyr::summarize(n_tot = n(),
                      n_ta_bin = unique(n_ta_bin),
                      .groups = "keep") %>%

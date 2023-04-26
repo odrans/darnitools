@@ -8,7 +8,8 @@ grid_orbit_ni_ta(
   df,
   fn_out,
   bins_ni = 10^seq(-3, 5, by = 0.05),
-  bins_ta = seq(-90, 0, by = 1)
+  bins_ta = seq(-90, 0, by = 1),
+  season_region = FALSE
 )
 }
 \description{

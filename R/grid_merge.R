@@ -21,9 +21,9 @@ grid_merge <- function(dir_out) {
   dir_orbit_ni_ta <- paste0(dir_out, "/ni_ta")
 
   ## Run the gridding functions
-  null <- darnitools::grid_merge_map(dir_orbit_map)
-  null <- darnitools::grid_merge_zonal(dir_orbit_zonal)
-  null <- darnitools::grid_merge_ni_ta(dir_orbit_ni_ta)
+  null <- grid_merge_map(dir_orbit_map)
+  null <- grid_merge_zonal(dir_orbit_zonal)
+  null <- grid_merge_ni_ta(dir_orbit_ni_ta)
 
   return(NULL)
 
@@ -51,11 +51,10 @@ grid_merge_ni_ta <- function(dir) {
 
   ## Merge the data
   df_grid <- df %>%
-    dplyr::group_by(ta) %>%
-    dplyr::group_by(ta, icnc_5um) %>%
+    dplyr::group_by(ta, season, region) %>%
     dplyr::mutate(n_ta_bin = sum(n_ta_bin)) %>%
     dplyr::ungroup() %>%
-    dplyr::group_by(ta, icnc_5um) %>%
+    dplyr::group_by(ta, icnc_5um, season, region) %>%
     dplyr::summarize(n_tot = sum(n_tot),
                      n_ta_bin = unique(n_ta_bin),
                      .groups = "keep") %>%
