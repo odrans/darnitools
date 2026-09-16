@@ -60,18 +60,17 @@ l2_read <- function(fn, dir_rds = NULL, filter_ice = TRUE, filter_quality = TRUE
                   idx = 1:n()) %>%
     dplyr::filter(!is.na(ta))
 
-  ## Apply quality filtering: number of iterations > 1
+  ## Apply quality filtering
+  tmp <- tmp %>%
+    dplyr::mutate(flag_ice = (icnc_5um > 0 & iwc > 1E-8 & clm == 1 & flag_mixed == 0 & ta < 270))
+
   if (filter_quality) {
+    ## Define ice clouds as clouds with ice concentration > 0 m-3, ice water content > 1E-8 kg/m3, simplified cloud mask = 1
     tmp <- tmp %>%
-      dplyr::filter(iteration_flag == 1) %>%
+      dplyr::mutate(icnc_5um = replace(icnc_5um, !flag_ice, 0)) %>%
+      dplyr::filter(iteration_flag == 1, !is.na(icnc_5um), !is.na(clm)) %>%
       dplyr::select(-c(iteration_flag))
   }
-
-  ## Define ice clouds as clouds with ice concentration > 0 m-3, ice water content > 1E-8 kg/m3, simplified cloud mask = 1
-  tmp <- tmp %>%
-    dplyr::mutate(flag_ice = (icnc_5um > 0 & iwc > 1E-8 & clm == 1 & flag_mixed == 0 & ta < 270),
-                  icnc_5um = replace(icnc_5um, !flag_ice, 0)) %>%
-    dplyr::filter(!is.na(icnc_5um) & !is.na(clm))
 
   ## Filter to only include ice clouds if requested
   if (filter_ice) {

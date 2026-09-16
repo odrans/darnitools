@@ -4,13 +4,13 @@
 #' If \code{version_2} is not NULL, it will also call \code{\link{grid_orbit_version}} and \code{\link{grid_merge_version}}.
 #'
 #' @param dir_darni Directory containing DARDAR-Nice L2 data.
-#' @param dir_gridded Directory that will contain the gridded product.
+#' @param dir_output Directory that will contain the gridded product.
 #' @param years_only Years to process. Default: NULL (all years).
 #' @param version_2 Version 2 of the DARDAR-Nice data to compare with. Default: NULL (no comparison).
 #' @param overwrite Overwrite the data if it exists. Default: FALSE.
 #' @param nthreads Number of parallel threads. Default: nthreads = 1.
 #' @export
-l2_grid <- function(dir_darni, dir_gridded, years_only = NULL, version_2 = NULL, overwrite = FALSE, nthreads = 1) {
+l2_grid <- function(dir_darni, dir_output, years_only = NULL, version_2 = NULL, overwrite = FALSE, nthreads = 1) {
 
   ## Set up parallelization if nthreads > 1
   parallel = FALSE
@@ -19,6 +19,10 @@ l2_grid <- function(dir_darni, dir_gridded, years_only = NULL, version_2 = NULL,
     parallel = TRUE
     doMC::registerDoMC(cores = nthreads)
   }
+
+  ## Create the output directory
+  dir_gridded <- paste0(dir_output, "/", basename(dir_darni))
+  dir.create(dir_gridded, recursive = TRUE, showWarnings = FALSE)
 
   ## List of DARDAR-Nice L2 files
   lf <- list.files(dir_darni, recursive = TRUE, full.names = TRUE, pattern = ".nc")

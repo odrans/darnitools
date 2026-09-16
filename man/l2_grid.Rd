@@ -6,7 +6,7 @@
 \usage{
 l2_grid(
   dir_darni,
-  dir_gridded,
+  dir_output,
   years_only = NULL,
   version_2 = NULL,
   overwrite = FALSE,
@@ -16,7 +16,7 @@ l2_grid(
 \arguments{
 \item{dir_darni}{Directory containing DARDAR-Nice L2 data.}
 
-\item{dir_gridded}{Directory that will contain the gridded product.}
+\item{dir_output}{Directory that will contain the gridded product.}
 
 \item{years_only}{Years to process. Default: NULL (all years).}
 
